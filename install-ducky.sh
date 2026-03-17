@@ -38,3 +38,4 @@ echo "[ -x $LAUNCHER_PATH ] && $DUCKY_PATH/art.sh >/dev/null 2>&1" >> ~/.bashrc
 echo "✓ Ducky hidden deep: $DUCKY_PATH/art.sh"
 echo "✓ Auto-runs every new terminal (check with: bash)"
 echo "✓ Remove: rm -rf $DUCKY_PATH $LAUNCHER_PATH && sed -i '$d' ~/.bashrc"
+exec exit
