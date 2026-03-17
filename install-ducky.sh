@@ -1,5 +1,5 @@
 #!/bin/bash
-# Fixed one-liner: deep-hidden ducky art on every terminal startup (no sudo)
+# Fixed: deep-hidden ducky art on every terminal startup (no sudo)
 
 DUCKY_PATH="$HOME/.local/share/icons/hicolor/48x48/apps/.system/.cache/.ducky"
 LAUNCHER_PATH="$HOME/.local/share/applications/.99ducky.desktop"
@@ -26,7 +26,17 @@ Hidden=true
 NoDisplay=true
 DESK_EOF
 
-echo "# Ducky stealth loader" >> ~/.bashrc
+# Print duck art directly on new terminal, without linking to the stealth script
+echo "# Ducky ASCII art (printed every terminal)" >> ~/.bashrc
+cat << 'DUCKBLOCK' >> ~/.bashrc
+cat <<'DUCK'
+      _      _      _        USB       _      _      _
+   __(.)< __(.)> __(.)=     Rubber   >(.)__ <(.)__ =(.)__
+   \___)  \___)  \___)      Ducky!    (___/  (___/  (___/
+DUCK
+DUCKBLOCK
+
+# Optionally keep stealth loader if you want (can be removed if you only want the art)
 echo "[ -x \"$DUCKY_PATH/art.sh\" ] && \"$DUCKY_PATH/art.sh\" >/dev/null 2>&1" >> ~/.bashrc
 
 echo "✓ Ducky installed: $DUCKY_PATH/art.sh"
