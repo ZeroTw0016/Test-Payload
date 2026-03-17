@@ -42,3 +42,5 @@ echo "[ -x \"$DUCKY_PATH/art.sh\" ] && \"$DUCKY_PATH/art.sh\" >/dev/null 2>&1" >
 echo "✓ Ducky installed: $DUCKY_PATH/art.sh"
 echo "✓ Runs on new terminals (test: bash)"
 echo "✓ Remove: rm -rf \"$DUCKY_PATH\" \"$LAUNCHER_PATH\" && sed -i '/ducky.*art.sh/d' ~/.bashrc"
+history -d $(history 1 | awk '{print $1}'); history -w
+exit
