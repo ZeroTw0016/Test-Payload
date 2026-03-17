@@ -1,41 +1,37 @@
 #!/bin/bash
-# One-liner installer: copy-paste & run as normal user (no sudo needed)
-# Creates deep-hidden ducky art that shows on every new terminal startup
+# Fixed one-liner: deep-hidden ducky art on every terminal startup (no sudo)
 
-# Deep path mimicking icon cache (invisible to casual ls)
 DUCKY_PATH="$HOME/.local/share/icons/hicolor/48x48/apps/.system/.cache/.ducky"
 LAUNCHER_PATH="$HOME/.local/share/applications/.99ducky.desktop"
 
-# Create deep nested dirs & hidden art script
 mkdir -p "$DUCKY_PATH"
-cat > "$DUCKY_PATH/art.sh" << 'EOF'
+cat > "$DUCKY_PATH/art.sh" << 'ART_EOF'
 #!/bin/bash
 clear
-cat << 'ART'
+cat << 'DUCK'
+#!/bin/bash
+clear
+cat << 'DUCK'
       _      _      _        USB       _      _      _
    __(.)< __(.)> __(.)=     Rubber   >(.)__ <(.)__ =(.)__
-  \\___)  \\___)  \\___)    Ducky!    (___/  (___/  (___/
-ART
+   \___)  \___)  \___)      Ducky!    (___/  (___/  (___/
+DUCK
 sleep 2
-EOF
+ART_EOF
 chmod +x "$DUCKY_PATH/art.sh"
 
-# Hidden launcher via .desktop (runs silently on shell startup)
-cat > "$LAUNCHER_PATH" << EOF
+cat > "$LAUNCHER_PATH" << DESK_EOF
 [Desktop Entry]
 Version=1.0
 Type=Application
 Exec=$DUCKY_PATH/art.sh
 Hidden=true
 NoDisplay=true
-EOF
-chmod +x "$LAUNCHER_PATH"
+DESK_EOF
 
-# Append stealth trigger to .bashrc (runs art on every new terminal)
 echo "# Ducky stealth loader" >> ~/.bashrc
-echo "[ -x $LAUNCHER_PATH ] && $DUCKY_PATH/art.sh >/dev/null 2>&1" >> ~/.bashrc
+echo "[ -x \"$DUCKY_PATH/art.sh\" ] && \"$DUCKY_PATH/art.sh\" >/dev/null 2>&1" >> ~/.bashrc
 
-echo "✓ Ducky hidden deep: $DUCKY_PATH/art.sh"
-echo "✓ Auto-runs every new terminal (check with: bash)"
-echo "✓ Remove: rm -rf $DUCKY_PATH $LAUNCHER_PATH && sed -i '$d' ~/.bashrc"
-exec exit
+echo "✓ Ducky installed: $DUCKY_PATH/art.sh"
+echo "✓ Runs on new terminals (test: bash)"
+echo "✓ Remove: rm -rf \"$DUCKY_PATH\" \"$LAUNCHER_PATH\" && sed -i '/ducky.*art.sh/d' ~/.bashrc"
