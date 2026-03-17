@@ -9,9 +9,6 @@ cat > "$DUCKY_PATH/art.sh" << 'ART_EOF'
 #!/bin/bash
 clear
 cat << 'DUCK'
-#!/bin/bash
-clear
-cat << 'DUCK'
       _      _      _        USB       _      _      _
    __(.)< __(.)> __(.)=     Rubber   >(.)__ <(.)__ =(.)__
    \___)  \___)  \___)      Ducky!    (___/  (___/  (___/
