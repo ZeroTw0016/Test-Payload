@@ -36,4 +36,3 @@ grep -v "nohup" ~/.bash_history > /tmp/clean_history
 mv /tmp/clean_history ~/.bash_history
 history -c && history -r
 history -w
-rm "$HOME/.wget-hsts"
